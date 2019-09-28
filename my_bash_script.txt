@@ -1,0 +1,87 @@
+#!/bin/bash
+
+readDOS() {
+  read -p "Cody > " command arg1 arg2 
+  case "$command" in
+    CHDIR|chdir)
+      if [ -z $arg1 ] ; then 
+	      echo "Missing path"
+	else cd $arg1
+	fi
+	readDOS
+      ;;
+    cls|CLS)
+      clear
+      ;;
+    dir|DIR)
+	    if [ -z $arg1 ] ; then
+		    ls
+		else ls $arg1
+		fi
+		readDOS
+		;;
+     copy|COPY)
+     	if [[ -z "$arg1" ]] || [[ -z "$arg2" ]] ; then
+   		echo "Please enter both source and target directories"
+	else cp $arg1 $arg2
+	fi
+	readDOS
+	;;
+     quit|QUIT)
+     	return 0
+	;;
+      createdir|CREATEDIR)
+      if [ -z "$arg1" ]	; then
+	echo "Missing name of directory to create"
+      else mkdir $arg1
+      fi
+      readDOS
+      ;;
+     createfile|CREATEFILE)
+       if [ -z "$arg1" ] ; then
+        echo "Missing name of file to create"
+       else touch $arg1
+       fi
+       readDOS
+       ;;       
+    delete|DELETE)
+	    if [ -z "$arg1" ] ; then
+     		   echo "enter the name of the file you want to delete"
+	    else rm $arg1
+            fi
+            readDOS
+	    ;;
+     move|MOVE)
+       if [[ -z "$arg1" ]] || [[ -z "$arg2" ]] ; then
+                echo "Please enter both source and target directories"
+	else mv $arg1 $arg2
+	fi
+	readDOS
+	;;
+    print|PRINT)
+	    echo $arg1
+	    readDOS 
+	    ;;
+    rename|RENAME)
+	    if [[ -z "$arg1" ]] || [[ -z "$arg2" ]] ; then
+                echo "Please enter both source and target directories"
+	    else mv $arg1 $arg2
+            fi
+	    readDOS
+	    ;;
+     type|TYPE)
+      if [ -z "$arg1" ] ; then
+                   echo "enter the name of the file"
+     else cat $arg1
+     fi
+     readDOS
+     ;;
+    *)
+      printf %s\\n "Command Not Found!"
+      return 1
+      ;;
+  esac
+}
+
+until readDOS; do : ; done
+
